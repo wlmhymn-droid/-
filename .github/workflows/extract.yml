@@ -1,4 +1,4 @@
-name: Auto Extract Files (Keep Archives)
+name: Auto Extract Full Source
 
 on:
   workflow_dispatch:
@@ -21,23 +21,13 @@ jobs:
           sudo apt-get install -y p7zip-full unzip git-lfs
           git lfs install
 
-      - name: Extract Split 7z Files
+      - name: Track ZIP with Git LFS
         run: |
-          if [ -f full_source.7z.001 ]; then
-            7z x full_source.7z.001 -y
-          fi
+          git lfs track "full_source.zip"
 
-      - name: Extract Zip and 7z Files
+      - name: Extract Full Source Zip
         run: |
-          [ -f ruffle.zip ] && unzip -o ruffle.zip || true
-          [ -f firebase.zip ] && unzip -o firebase.zip || true
-          [ -f index.7z ] && 7z x index.7z -y || true
-
-      - name: Track Large Files with Git LFS
-        run: |
-          git lfs track "*.00*"
-          git lfs track "*.7z"
-          git lfs track "*.zip"
+          [ -f full_source.zip ] && unzip -o full_source.zip || true
 
       - name: Commit and Push All Files
         run: |
@@ -45,6 +35,5 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .gitattributes
           git add .
-          git commit -m "Extracted files while keeping original archives" || exit 0
+          git commit -m "Upload and extract full_source.zip using Git LFS" || exit 0
           git push
- 
