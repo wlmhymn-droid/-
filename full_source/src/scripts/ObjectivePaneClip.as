@@ -1,0 +1,24 @@
+package
+{
+   import flash.display.MovieClip;
+   
+   [Embed(source="/_assets/assets.swf", symbol="ObjectivePaneClip")]
+   public dynamic class ObjectivePaneClip extends MovieClip
+   {
+       
+      
+      public var slidingPane:MovieClip;
+      
+      public var tag:MovieClip;
+      
+      public function ObjectivePaneClip()
+      {
+         var _loc1_:Boolean = true;
+         var _loc2_:Boolean = false;
+         if(_loc1_)
+         {
+            super();
+         }
+      }
+   }
+}
