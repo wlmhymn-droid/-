@@ -15,42 +15,28 @@ package battlePanic.ui
    import flash.events.MouseEvent;
    import flash.net.URLRequest;
    import flash.net.navigateToURL;
+   import flash.external.ExternalInterface;
    import ninjakiwi.utils.§[H§;
    
    public class TitleScreen extends RevealableView implements Transitionable
    {
       
       private static var _instance:TitleScreen;
-       
       
       private var _playButton:ExpandRolloverButton;
-      
       private var _moreGamesButton:ExpandRolloverButton;
-      
       private var _nkLogoButton:ButtonControllerBase;
-      
       private var _clip:MovieClip;
-      
       public var shared:Shared;
-      
       private var _upgradesButton:ExpandRolloverButton;
-      
       private var _loginButton:ExpandRolloverButton;
-      
       private var _playAsGuestButton:ExpandRolloverButton;
-      
       private var _warningLoginButton:ExpandRolloverButton;
-      
       private var _warningPlayAsGuestButton:ExpandRolloverButton;
-      
       private var _difficultySelect:DifficultySelectScreen;
-      
       private var _initialisationProgressClip:MovieClip;
-      
       private var _goStraightToDifficultyScreen:Boolean = false;
-      
       private var resetCookieButton:ExpandRolloverButton;
-      
       internal var firstReveal:Boolean = true;
       
       public function TitleScreen(param1:SingletonBlocker)
@@ -186,7 +172,8 @@ package battlePanic.ui
                                  {
                                     while(true)
                                     {
-                                       this._nkLogoButton.setClickFunction(this.moreGamesButtonClickedHandler);
+                                       // nk logo disabled
+                                       this._nkLogoButton.setClickFunction(function():void { trace("NK logo disabled"); });
                                        continue loop14;
                                     }
                                     addr208:
@@ -311,16 +298,13 @@ package battlePanic.ui
                   
                   while(true)
                   {
-                     TweenLite.to(this._clip.percentMeter,1,{
-                        "alpha":0,
-                        "onComplete":function():*
+                     TweenLite.to(this._clip.percentMeter,1,{"alpha":0,"onComplete":function():*
+                     {
+                        if(_clip.percentMeter.parent)
                         {
-                           if(_clip.percentMeter.parent)
-                           {
-                              _clip.percentMeter.parent.removeChild(_clip.percentMeter);
-                           }
+                           _clip.percentMeter.parent.removeChild(_clip.percentMeter);
                         }
-                     });
+                     }});
                      if(_loc3_ || _loc3_)
                      {
                         break;
@@ -588,202 +572,27 @@ package battlePanic.ui
       
       private function loginButtonClickedHandler() : void
       {
-         var _loc1_:Boolean = true;
-         var _loc2_:Boolean = false;
-         if(_loc1_)
+         try
          {
-            navigateToURL(new URLRequest("https://ninjakiwi.com/login"),"_blank");
-         }
-      }
-      
-      public function hideUI(param1:Number = 0.5) : void
-      {
-         var _loc2_:Boolean = true;
-         var _loc3_:Boolean = false;
-         if(_loc2_ || _loc3_)
-         {
-            TweenLite.to(this._clip.ui,param1,{"alpha":0});
-            while(true)
+            if(ExternalInterface.available)
             {
-               this._clip.ui.mouseEnabled = false;
-               loop1:
-               while(_loc2_)
-               {
-                  while(true)
-                  {
-                     this._clip.ui.mouseChildren = false;
-                     if(_loc2_)
-                     {
-                        break;
-                     }
-                     continue loop1;
-                  }
-                  return;
-               }
+               ExternalInterface.call("loginWithGoogle");
+            }
+            else
+            {
+               trace("ExternalInterface not available; cannot open Google Sign-In from SWF.");
             }
          }
-         §§goto(addr49);
-      }
-      
-      public function showUI(param1:Number = 0.5) : void
-      {
-         var _loc2_:Boolean = false;
-         var _loc3_:Boolean = true;
-         if(_loc3_ || Boolean(param1))
+         catch(err:Error)
          {
-            this.hideAllUIElements();
-            loop0:
-            while(true)
-            {
-               TweenLite.to(this._clip.ui,param1,{"alpha":1});
-               while(true)
-               {
-                  this._clip.ui.mouseEnabled = true;
-                  loop2:
-                  while(_loc3_ || Boolean(this))
-                  {
-                     if(_loc3_)
-                     {
-                        while(true)
-                        {
-                           this._clip.ui.mouseChildren = true;
-                           if(_loc3_)
-                           {
-                              break;
-                           }
-                           continue loop2;
-                        }
-                        return;
-                        continue;
-                     }
-                     continue loop0;
-                  }
-               }
-            }
-         }
-         §§goto(addr57);
-      }
-      
-      override public function prepareToReveal() : void
-      {
-         var _loc1_:Boolean = true;
-         var _loc2_:Boolean = false;
-         §§push(this.shared);
-         loop0:
-         while(true)
-         {
-            §§pop().CENTRAL_DISPATCHER.dispatchEvent(new Event("TitleScreenWillReveal"));
-            LGDisplayListUtil.getInstance().§48§(this);
-            loop1:
-            while(true)
-            {
-               super.prepareToReveal();
-               §§push(this._goStraightToDifficultyScreen);
-               while(true)
-               {
-                  if(§§pop())
-                  {
-                     addr154:
-                     this._difficultySelect.visible = true;
-                     while(true)
-                     {
-                        §§push(this._difficultySelect);
-                     }
-                     addr156:
-                  }
-                  else
-                  {
-                     §§push(this._difficultySelect);
-                     if(!(_loc2_ && Boolean(this)))
-                     {
-                        if(_loc1_)
-                        {
-                           §§push(0);
-                           if(!(_loc2_ && _loc2_))
-                           {
-                              §§pop().fadeOut(§§pop());
-                           }
-                           else
-                           {
-                              loop3:
-                              while(true)
-                              {
-                                 §§pop().alpha = §§pop();
-                                 this._goStraightToDifficultyScreen = false;
-                                 if(!(_loc2_ && Boolean(this)))
-                                 {
-                                    break;
-                                 }
-                                 addr145:
-                                 while(true)
-                                 {
-                                    continue loop3;
-                                 }
-                              }
-                           }
-                           continue loop0;
-                        }
-                        §§goto(addr154);
-                        §§goto(addr156);
-                     }
-                  }
-                  §§goto(addr145);
-                  addr103:
-                  §§pop().sound.playMenuMusic();
-                  §§push(this.firstReveal);
-                  if(_loc1_ || _loc2_)
-                  {
-                     if(!§§pop())
-                     {
-                        this._clip.doorFront.gotoAndStop(1);
-                        this._clip.doorFront.visible = true;
-                        addr59:
-                        if(_loc1_ || _loc2_)
-                        {
-                           if(_loc2_)
-                           {
-                              continue loop1;
-                           }
-                           this._clip.doorBack.gotoAndStop(1);
-                           this._clip.doorBack.visible = true;
-                           addr36:
-                           if(_loc1_)
-                           {
-                              if(_loc1_ || _loc2_)
-                              {
-                                 §§goto(addr18);
-                              }
-                              §§goto(addr59);
-                           }
-                           addr52:
-                           §§goto(addr52);
-                        }
-                        addr92:
-                        §§goto(addr92);
-                     }
-                     addr18:
-                     this.firstReveal = false;
-                  }
-                  continue;
-                  if(!(_loc1_ || _loc1_))
-                  {
-                     §§goto(addr36);
-                  }
-                  return;
-               }
-               continue loop0;
-            }
+            trace("loginButtonClickedHandler error: " + err.message);
          }
       }
       
       private function moreGamesButtonClickedHandler() : void
       {
-         var _loc1_:Boolean = false;
-         var _loc2_:Boolean = true;
-         if(_loc2_)
-         {
-            navigateToURL(new URLRequest("http://www.ninjakiwi.com"),"_blank");
-         }
+         // Disabled Ninja Kiwi external link
+         trace("moreGamesButtonClickedHandler: disabled (ninjakiwi links removed)");
       }
       
       override public function arriveAfterTransition() : void
@@ -909,13 +718,10 @@ package battlePanic.ui
          time = param1;
          do
          {
-            TweenLite.to(this._clip.connectingMessage,time,{
-               "alpha":0,
-               "onComplete":function():*
-               {
-                  _clip.connectingMessage.visible = false;
-               }
-            });
+            TweenLite.to(this._clip.connectingMessage,time,{"alpha":0,"onComplete":function():*
+            {
+               _clip.connectingMessage.visible = false;
+            }});
          }
          while(_loc4_ && _loc2_);
          
@@ -952,13 +758,10 @@ package battlePanic.ui
                   continue;
                }
                §§goto(addr85);
-               TweenLite.to(this._clip.loginOptions,1,{
-                  "alpha":1,
-                  "onComplete":function():*
-                  {
-                     trace("showLoginOptions finished");
-                  }
-               });
+               TweenLite.to(this._clip.loginOptions,1,{"alpha":1,"onComplete":function():*
+               {
+                  trace("showLoginOptions finished");
+               }});
                if(_loc3_ || _loc1_)
                {
                   continue loop2;
@@ -998,74 +801,5 @@ package battlePanic.ui
          }
       }
       
-      public function showCookieWarning() : void
-      {
-         var _loc1_:Boolean = true;
-         var _loc2_:Boolean = false;
-         if(_loc1_ || _loc2_)
-         {
-            this._clip.cookieWarning.y = -this._clip.cookieWarning.height * 0.6;
-            loop0:
-            while(true)
-            {
-               TweenLite.to(this._clip.cookieWarning,0.6,{
-                  "y":this.shared.STAGE_HEIGHT * 0.5,
-                  "ease":Back.easeOut
-               });
-               do
-               {
-                  this._clip.cookieWarning.mouseEnabled = true;
-                  continue loop0;
-               }
-               while(_loc2_ && Boolean(this));
-               
-            }
-         }
-      }
-      
-      public function hideCookieWarning() : void
-      {
-         var _loc1_:Boolean = false;
-         var _loc2_:Boolean = true;
-         if(_loc2_)
-         {
-            TweenLite.to(this._clip.cookieWarning,0.6,{
-               "y":-this._clip.cookieWarning.height * 0.6,
-               "ease":Back.easeIn
-            });
-         }
-         do
-         {
-            this._clip.cookieWarning.mouseEnabled = false;
-            do
-            {
-               this._clip.cookieWarning.mouseChildren = false;
-            }
-            while(_loc1_ && _loc2_);
-            
-         }
-         while(_loc1_);
-         
-      }
-      
-      private function prepareToReturnToTitleFromDifficultySelectHandler(param1:Event) : void
-      {
-         var _loc2_:Boolean = false;
-         var _loc3_:Boolean = true;
-         if(!_loc2_)
-         {
-            LGDisplayListUtil.getInstance().§;E§(this._clip,true,false,true);
-         }
-      }
-   }
-}
-
-class SingletonBlocker
-{
-    
-   
-   public function SingletonBlocker()
-   {
-      super();
    }
 }
