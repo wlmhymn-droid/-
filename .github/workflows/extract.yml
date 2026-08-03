@@ -21,19 +21,24 @@ jobs:
           sudo apt-get install -y p7zip-full unzip git-lfs
           git lfs install
 
-      - name: Track ZIP with Git LFS
+      - name: Track Large Files and FLA with Git LFS
         run: |
-          git lfs track "full_source.zip"
+          git lfs track "*.zip"
+          git lfs track "*.7z"
+          git lfs track "*.00*"
+          git lfs track "*.fla"
 
       - name: Extract Full Source Zip
         run: |
           [ -f full_source.zip ] && unzip -o full_source.zip || true
+          [ -f full_source.7z.001 ] && 7z x full_source.7z.001 -y || true
 
       - name: Commit and Push All Files
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git lfs track "*.fla"
           git add .gitattributes
           git add .
-          git commit -m "Upload and extract full_source.zip using Git LFS" || exit 0
+          git commit -m "Upload and track large fla files with Git LFS" || exit 0
           git push
