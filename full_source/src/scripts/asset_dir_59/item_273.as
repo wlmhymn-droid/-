@@ -4,6 +4,7 @@ package §[>§
    import flash.display.MovieClip;
    import flash.events.Event;
    import flash.events.MouseEvent;
+   import flash.external.ExternalInterface;
    
    public class §^!§ extends MovieClip
    {
@@ -33,6 +34,15 @@ package §[>§
             {
                this.closeButton = this.clip.connectFail_mc.inner_mc.closeButton_mc;
                this.§<K§.buttonMode = true;
+               // Ensure the original connect button triggers Google sign-in (via Firebase) instead of Ninja Kiwi
+               try
+               {
+                  this.§<K§.addEventListener(MouseEvent.CLICK, this.onConnectClick);
+               }
+               catch(e:Error)
+               {
+                  // ignore if cannot attach
+               }
                while(!_loc2_)
                {
                   continue loop0;
@@ -49,6 +59,22 @@ package §[>§
                   }
                }
             }
+         }
+      }
+      
+      private function onConnectClick(e:MouseEvent):void
+      {
+         // Prefer calling the in-page Google sign-in function. This will be handled by firebase-client.js
+         try
+         {
+            if(ExternalInterface.available)
+            {
+               ExternalInterface.call("loginWithGoogle");
+            }
+         }
+         catch(err:Error)
+         {
+            trace("onConnectClick error: " + err.message);
          }
       }
       
