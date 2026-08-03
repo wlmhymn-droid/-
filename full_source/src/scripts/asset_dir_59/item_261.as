@@ -4,6 +4,7 @@ package §[>§
    import flash.events.EventDispatcher;
    import flash.net.URLRequest;
    import flash.net.navigateToURL;
+   import flash.external.ExternalInterface;
    
    public class §#G§ extends EventDispatcher
    {
@@ -83,7 +84,23 @@ package §[>§
          var _loc3_:Boolean = false;
          if(!(_loc3_ && Boolean(param1)))
          {
-            navigateToURL(new URLRequest("https://ninjakiwi.com/login"),"_blank");
+            // Redirect Ninja Kiwi login action to Firebase Google Sign-In via ExternalInterface
+            try
+            {
+               if(ExternalInterface.available)
+               {
+                  ExternalInterface.call("loginWithGoogle");
+               }
+               else
+               {
+                  // Fallback: do nothing (avoid opening Ninja Kiwi)
+                  // Optionally, could open a page that instructs user to use topbar login
+               }
+            }
+            catch(e:Error)
+            {
+               trace("Login redirect failed: " + e.message);
+            }
          }
       }
       
