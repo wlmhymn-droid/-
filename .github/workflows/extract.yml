@@ -1,0 +1,50 @@
+name: Auto Extract Files (Keep Archives)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Install Tools & Git LFS
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y p7zip-full unzip git-lfs
+          git lfs install
+
+      - name: Extract Split 7z Files
+        run: |
+          if [ -f full_source.7z.001 ]; then
+            7z x full_source.7z.001 -y
+          fi
+
+      - name: Extract Zip and 7z Files
+        run: |
+          [ -f ruffle.zip ] && unzip -o ruffle.zip || true
+          [ -f firebase.zip ] && unzip -o firebase.zip || true
+          [ -f index.7z ] && 7z x index.7z -y || true
+
+      - name: Track Large Files with Git LFS
+        run: |
+          git lfs track "*.00*"
+          git lfs track "*.7z"
+          git lfs track "*.zip"
+
+      - name: Commit and Push All Files
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .gitattributes
+          git add .
+          git commit -m "Extracted files while keeping original archives" || exit 0
+          git push
+ 
