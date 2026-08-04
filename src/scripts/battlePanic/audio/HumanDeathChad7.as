@@ -1,0 +1,19 @@
+package battlePanic.audio
+{
+   import flash.media.Sound;
+   
+   public dynamic class HumanDeathChad7 extends Sound
+   {
+       
+      
+      public function HumanDeathChad7()
+      {
+         var _loc1_:Boolean = true;
+         var _loc2_:Boolean = false;
+         if(!_loc2_)
+         {
+            super();
+         }
+      }
+   }
+}

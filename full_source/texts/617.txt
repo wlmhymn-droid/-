@@ -1,0 +1,5 @@
+This will remove all upgrades 
+--- RECORDSEPARATOR ---
+and give back your upgrade 
+--- RECORDSEPARATOR ---
+points.
