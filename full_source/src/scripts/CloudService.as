@@ -1,7 +1,6 @@
 package {
   import flash.external.ExternalInterface;
   import flash.display.MovieClip;
-  import flash.display.Stage;
 
   public class CloudService {
     public function CloudService() {
@@ -16,8 +15,6 @@ package {
           ExternalInterface.addCallback("onSaveSaved", onSaveSavedFromJS);
           ExternalInterface.addCallback("onSaveError", onSaveErrorFromJS);
           ExternalInterface.addCallback("onBackupList", onBackupListFromJS);
-          // allow JS to set target FPS on the SWF
-          ExternalInterface.addCallback("setTargetFPS", onSetTargetFPSFromJS);
         }
       } catch (e:Error) {
         // ignore
@@ -77,39 +74,6 @@ package {
 
     private static function onBackupListFromJS(payload:Object):void {
       trace("CloudService.onBackupListFromJS: " + payload);
-    }
-
-    private static function onSetTargetFPSFromJS(payload:Object):void {
-      try {
-        var fps:Number = 0;
-        if (payload is String) {
-          fps = Number(payload);
-        } else if (payload is Number) {
-          fps = payload as Number;
-        }
-        if (isNaN(fps) || fps <= 0) return;
-
-        // Try to set stage frameRate via root movieclip
-        try {
-          var rootMC:MovieClip = MovieClip(FlashRootHelper.getRootMovieClip());
-          if (rootMC && rootMC.stage) {
-            rootMC.stage.frameRate = fps;
-            trace("CloudService: set stage.frameRate to " + fps);
-            return;
-          }
-        } catch(e:Error) {
-          // ignore
-        }
-
-        // Try Shared instance if available
-        try {
-          var SharedClass:Object = describeType(Shared);
-        } catch(e:Error) {
-          // ignore - Shared may not be accessible here
-        }
-      } catch (e:Error) {
-        trace("onSetTargetFPSFromJS failed: " + e.message);
-      }
     }
   }
 }
