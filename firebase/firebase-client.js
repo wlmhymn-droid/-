@@ -27,7 +27,8 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = {
+// Allow runtime override from an ignored file (firebase/firebase-config.js)
+const firebaseConfig = window.__FIREBASE_CONFIG__ || {
   apiKey: "AIzaSyDxqcSLNDfHlp2ifT_uAo40NmO7aLg_SKI",
   authDomain: "battlepanic-5ce76.firebaseapp.com",
   projectId: "battlepanic-5ce76",
@@ -171,6 +172,19 @@ window.watchAuthState = function (cb) {
     }
   });
 };
+
+// Also notify SWF directly whenever auth state changes
+onAuthStateChanged(auth, (user) => {
+  try {
+    if (user) {
+      callAS("onAuthChanged", JSON.stringify({ uid: user.uid, email: user.email || null, displayName: user.displayName || null, photoURL: user.photoURL || null }));
+    } else {
+      callAS("onAuthChanged", null);
+    }
+  } catch (e) {
+    console.warn("Failed to notify SWF of auth state change", e);
+  }
+});
 
 // Allow AS to call window.googleLogin as compatibility
 window.googleLogin = () => window.loginWithGoogle && window.loginWithGoogle();

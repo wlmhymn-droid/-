@@ -1,8 +1,12 @@
-// Firebase configuration
+// Firebase configuration loader
+// If a firebase/firebase-config.js file (created from firebase-config.example.js) sets
+// window.__FIREBASE_CONFIG__, that value will be used. This keeps sensitive files out of git.
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-const firebaseConfig = {
+// allow runtime override from an ignored file
+const firebaseConfig = window.__FIREBASE_CONFIG__ || {
     apiKey: "AIzaSyDxqcSLNDfHlp2ifT_uAo40NmO7aLg_SKI",
     authDomain: "battlepanic-5ce76.firebaseapp.com",
     projectId: "battlepanic-5ce76",
