@@ -1,111 +1,91 @@
-import { auth } from "./firebase.js";
-
+import { auth, db } from "./firebase.js";
 import {
-    getFirestore,
-    doc,
-    getDoc,
-    setDoc,
-    serverTimestamp
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const db = getFirestore();
+function getGamePlayer() {
+  return document.getElementById("gamePlayer");
+}
 
-window.saveCloudData = async function (key, jsonData) {
-
-    const user = auth.currentUser;
-
-    if (!user) {
-        console.warn("User not logged in");
-        return;
+function callGame(methodName, payload) {
+  try {
+    const swf = getGamePlayer();
+    if (swf && typeof swf[methodName] === "function") {
+      swf[methodName](payload);
     }
+  } catch (error) {
+    console.warn(`Could not call SWF method ${methodName}`, error);
+  }
+}
 
-    try {
+function parseJsonMaybe(value) {
+  if (typeof value !== "string") {
+    return value;
+  }
 
-        await setDoc(
-            doc(db, "saves", user.uid),
-            {
-                [key]: jsonData,
-                updated: serverTimestamp()
-            },
-            {
-                merge: true
-            }
-        );
+  try {
+    return JSON.parse(value);
+  } catch (_) {
+    return value;
+  }
+}
 
-        const swf = document.getElementById("gamePlayer");
+export async function saveCloudData(key = "autosave", jsonData = {}) {
+  const user = auth.currentUser;
 
-        if (swf && typeof swf.onSaveSaved === "function") {
-            swf.onSaveSaved("ok");
-        }
+  if (!user) {
+    callGame("onSaveError", "Not signed in");
+    return null;
+  }
 
-    } catch (e) {
+  const saveRef = doc(db, "users", user.uid, "saves", key);
+  const data = parseJsonMaybe(jsonData);
 
-        console.error(e);
+  try {
+    await setDoc(saveRef, {
+      key,
+      data,
+      ownerUid: user.uid,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
 
-        const swf = document.getElementById("gamePlayer");
+    callGame("onSaveSaved", JSON.stringify({ key }));
+    return data;
+  } catch (error) {
+    console.error("Cloud save failed", error);
+    callGame("onSaveError", error.message || String(error));
+    return null;
+  }
+}
 
-        if (swf && typeof swf.onSaveError === "function") {
-            swf.onSaveError(e.message);
-        }
+export async function loadCloudData(key = "autosave") {
+  const user = auth.currentUser;
 
-    }
+  if (!user) {
+    callGame("onSaveLoaded", null);
+    return null;
+  }
 
-};
+  try {
+    const snap = await getDoc(doc(db, "users", user.uid, "saves", key));
+    const save = snap.exists() ? snap.data().data ?? null : null;
+    callGame("onSaveLoaded", typeof save === "string" ? save : JSON.stringify(save));
+    return save;
+  } catch (error) {
+    console.error("Cloud load failed", error);
+    callGame("onSaveError", error.message || String(error));
+    return null;
+  }
+}
 
-window.loadCloudData = async function (key) {
+export async function getBackupList() {
+  callGame("onBackupList", "[]");
+  return [];
+}
 
-    const user = auth.currentUser;
-
-    if (!user) {
-        console.warn("User not logged in");
-        return;
-    }
-
-    try {
-
-        const ref = doc(db, "saves", user.uid);
-
-        const snap = await getDoc(ref);
-
-        const swf = document.getElementById("gamePlayer");
-
-        if (!snap.exists()) {
-
-            if (swf && typeof swf.onSaveLoaded === "function") {
-                swf.onSaveLoaded(null);
-            }
-
-            return;
-        }
-
-        const data = snap.data();
-
-        const save = data[key] || null;
-
-        if (swf && typeof swf.onSaveLoaded === "function") {
-            swf.onSaveLoaded(save);
-        }
-
-    } catch (e) {
-
-        console.error(e);
-
-        const swf = document.getElementById("gamePlayer");
-
-        if (swf && typeof swf.onSaveError === "function") {
-            swf.onSaveError(e.message);
-        }
-
-    }
-
-};
-
-window.getBackupList = async function () {
-
-    const swf = document.getElementById("gamePlayer");
-
-    if (swf && typeof swf.onBackupList === "function") {
-        swf.onBackupList("[]");
-    }
-
-};
+window.saveCloudData = saveCloudData;
+window.loadCloudData = loadCloudData;
+window.getBackupList = getBackupList;

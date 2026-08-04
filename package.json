@@ -1,10 +1,12 @@
 {
-  "name": "mhymn-web-build",
+  "name": "battlepanic-web-build",
   "version": "1.0.0",
-  "description": "Web build for MHYMN (Battle Panic fork)",
-  "main": "index.js",
+  "description": "Web build for Battle Panic with Google Firebase Authentication and per-user Firestore cloud saves.",
+  "main": "index.html",
   "scripts": {
-    "build-web": "cp -R index.html firebase ruffle web-build/ || true"
+    "build-web": "rm -rf web-build && mkdir -p web-build && cp -R index.html battlepanic.swf firebase ruffle web-build/",
+    "start": "python3 -m http.server 8080",
+    "check": "npm run build-web && node --check firebase/auth.js && node --check firebase/firebase-client.js && node --check firebase/firebase-config.example.js && node --check firebase/firebase.js && node --check firebase/save.js"
   },
   "dependencies": {
     "@capacitor/core": "^5.0.0"

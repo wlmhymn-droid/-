@@ -46,9 +46,46 @@
             max-width: 1200px;
             aspect-ratio: 4 / 3;
         }
+        #gameContainer { position: relative; }
         #gameContainer embed {
             width: 100%;
             height: 100%;
+        }
+        #settingsBtn {
+            background: #333;
+            color: #fff;
+            border: 1px solid #666;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-inline-start: 8px;
+        }
+        #settingsPanel {
+            display: none;
+            position: fixed;
+            inset: 64px 16px auto auto;
+            width: min(320px, calc(100% - 32px));
+            background: #202020;
+            border: 1px solid #666;
+            border-radius: 8px;
+            color: #fff;
+            padding: 16px;
+            z-index: 10;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+        #settingsPanel.open { display: block; }
+        #settingsPanel label { display: block; margin: 12px 0 4px; }
+        #settingsPanel select, #settingsPanel input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+        }
+        #settingsPanel .actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 14px;
         }
     </style>
 
@@ -68,8 +105,8 @@
     <script src="ruffle/ruffle.js"></script>
 
     <script type="module" src="firebase/firebase.js"></script>
-    <script type="module" src="firebase/auth.js"></script>
     <script type="module" src="firebase/save.js"></script>
+    <script type="module" src="firebase/auth.js"></script>
 </head>
 
 <body>
@@ -78,6 +115,24 @@
         <div id="authArea">
             <button id="loginBtn">تسجيل الدخول بحساب جوجل</button>
         </div>
+        <button id="settingsBtn" type="button">Setting</button>
+    </div>
+
+    <div id="settingsPanel" aria-hidden="true">
+        <strong>Setting</strong>
+        <label for="qualitySelect">الجودة</label>
+        <select id="qualitySelect">
+            <option value="low">Low - للأجهزة الضعيفة</option>
+            <option value="medium">Medium - متوازن</option>
+            <option value="high">High - للأجهزة القوية</option>
+        </select>
+        <label for="frameRateInput">الفريمات المستهدفة</label>
+        <input id="frameRateInput" type="number" min="15" max="60" step="5" value="30">
+        <div class="actions">
+            <button id="closeSettings" type="button">إغلاق</button>
+            <button id="saveSettings" type="button">حفظ</button>
+        </div>
+        <small>قد تحتاج بعض إعدادات Ruffle إلى إعادة تحميل الصفحة لتطبيقها بالكامل.</small>
     </div>
 
     <div id="gameContainer">
@@ -94,6 +149,44 @@
         import { loginWithGoogle, logout, watchAuthState } from "./firebase/auth.js";
 
         const authArea = document.getElementById("authArea");
+        let storedSettings = {};
+        try {
+            storedSettings = JSON.parse(localStorage.getItem("battlepanic_settings") || "{}");
+        } catch (_) {
+            storedSettings = {};
+        }
+        const qualitySelect = document.getElementById("qualitySelect");
+        const frameRateInput = document.getElementById("frameRateInput");
+        const settingsPanel = document.getElementById("settingsPanel");
+        const gamePlayer = document.getElementById("gamePlayer");
+
+        qualitySelect.value = storedSettings.quality || "medium";
+        frameRateInput.value = storedSettings.frameRate || 30;
+        gamePlayer.setAttribute("quality", qualitySelect.value);
+
+        function openSettings() {
+            settingsPanel.classList.add("open");
+            settingsPanel.setAttribute("aria-hidden", "false");
+        }
+
+        document.getElementById("settingsBtn").onclick = () => {
+            settingsPanel.classList.toggle("open");
+            settingsPanel.setAttribute("aria-hidden", settingsPanel.classList.contains("open") ? "false" : "true");
+        };
+        window.openSettings = openSettings;
+        document.getElementById("closeSettings").onclick = () => settingsPanel.classList.remove("open");
+        document.getElementById("saveSettings").onclick = () => {
+            const settings = {
+                quality: qualitySelect.value,
+                frameRate: Number(frameRateInput.value) || 30
+            };
+            localStorage.setItem("battlepanic_settings", JSON.stringify(settings));
+            gamePlayer.setAttribute("quality", settings.quality);
+            window.RufflePlayer.config.quality = settings.quality;
+            window.RufflePlayer.config.frameRate = settings.frameRate;
+            settingsPanel.classList.remove("open");
+        };
+
 
         function renderLoggedIn(user) {
             authArea.innerHTML = "";

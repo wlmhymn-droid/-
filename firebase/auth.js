@@ -1,41 +1,64 @@
 import { auth, provider } from "./firebase.js";
+import { loadCloudData } from "./save.js";
 import {
-    signInWithPopup,
-    signOut,
-    onAuthStateChanged
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// تسجيل الدخول بـ Google
+function callGame(methodName, payload) {
+  try {
+    const player = document.getElementById("gamePlayer");
+    if (player && typeof player[methodName] === "function") {
+      player[methodName](payload);
+    }
+  } catch (error) {
+    console.warn(`Could not call SWF method ${methodName}`, error);
+  }
+}
+
+function publicUser(user) {
+  return user ? {
+    uid: user.uid,
+    email: user.email || null,
+    displayName: user.displayName || null,
+    photoURL: user.photoURL || null
+  } : null;
+}
+
 export async function loginWithGoogle() {
-    try {
-        const result = await signInWithPopup(auth, provider);
-        return result.user;
-    } catch (e) {
-        console.error("Google sign-in failed:", e);
-        alert("تعذّر تسجيل الدخول عبر جوجل: " + e.message);
-    }
+  try {
+    const result = await signInWithPopup(auth, provider);
+    return publicUser(result.user);
+  } catch (error) {
+    console.error("Google sign-in failed", error);
+    callGame("onAuthError", error.message || String(error));
+    alert("تعذّر تسجيل الدخول عبر جوجل: " + (error.message || String(error)));
+    return null;
+  }
 }
 
-// تسجيل الخروج
 export async function logout() {
-    try {
-        await signOut(auth);
-    } catch (e) {
-        console.error("Sign-out failed:", e);
-    }
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Sign-out failed", error);
+    callGame("onAuthError", error.message || String(error));
+  }
 }
 
-// مراقبة حالة تسجيل الدخول وتلقائياً تحميل بيانات الحفظ عند الدخول
 export function watchAuthState(callback) {
-    onAuthStateChanged(auth, (user) => {
-        callback(user);
+  return onAuthStateChanged(auth, async (user) => {
+    const safeUser = publicUser(user);
+    callback(safeUser);
+    callGame("onAuthChanged", safeUser ? JSON.stringify(safeUser) : null);
 
-        if (user && window.loadCloudData) {
-            window.loadCloudData("autosave");
-        }
-    });
+    if (user) {
+      await loadCloudData("autosave");
+    }
+  });
 }
 
-// تصدير الدوال للـ Global Scope للاستدعاء من ActionScript (SWF)
 window.loginWithGoogle = loginWithGoogle;
+window.googleLogin = loginWithGoogle;
 window.logout = logout;
