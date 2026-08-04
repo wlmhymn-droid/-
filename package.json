@@ -1,0 +1,12 @@
+{
+  "name": "mhymn-web-build",
+  "version": "1.0.0",
+  "description": "Web build for MHYMN (Battle Panic fork)",
+  "main": "index.js",
+  "scripts": {
+    "build-web": "cp -R index.html firebase ruffle web-build/ || true"
+  },
+  "dependencies": {
+    "@capacitor/core": "^5.0.0"
+  }
+}

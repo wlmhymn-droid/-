@@ -1,0 +1,10 @@
+# Ignore local config, build artifacts and signing keys
+node_modules/
+android/
+*.keystore
+*.jks
+android/app/google-services.json
+firebase/firebase-config.js
+.DS_Store
+dist/
+.env
