@@ -5,6 +5,7 @@ import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// تسجيل الدخول بـ Google
 export async function loginWithGoogle() {
     try {
         const result = await signInWithPopup(auth, provider);
@@ -15,6 +16,7 @@ export async function loginWithGoogle() {
     }
 }
 
+// تسجيل الخروج
 export async function logout() {
     try {
         await signOut(auth);
@@ -23,6 +25,17 @@ export async function logout() {
     }
 }
 
+// مراقبة حالة تسجيل الدخول وتلقائياً تحميل بيانات الحفظ عند الدخول
 export function watchAuthState(callback) {
-    onAuthStateChanged(auth, (user) => callback(user));
+    onAuthStateChanged(auth, (user) => {
+        callback(user);
+
+        if (user && window.loadCloudData) {
+            window.loadCloudData("autosave");
+        }
+    });
 }
+
+// تصدير الدوال للـ Global Scope للاستدعاء من ActionScript (SWF)
+window.loginWithGoogle = loginWithGoogle;
+window.logout = logout;
