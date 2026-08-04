@@ -1,1 +1,0 @@
-Relying on local flash cookie for save data
