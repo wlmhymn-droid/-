@@ -52,7 +52,7 @@
         }
     </style>
 
-    <!-- إعداد جودة Ruffle قبل تحميل السكربت: متوسطة لتناسب الأجهزة متوسطة الأداء -->
+    <!-- إعداد جودة Ruffle قبل تحميل السكربت -->
     <script>
         window.RufflePlayer = window.RufflePlayer || {};
         window.RufflePlayer.config = {
@@ -94,7 +94,6 @@
         import { loginWithGoogle, logout, watchAuthState } from "./firebase/auth.js";
 
         const authArea = document.getElementById("authArea");
-        const loginBtn = document.getElementById("loginBtn");
 
         function renderLoggedIn(user) {
             authArea.innerHTML = "";
@@ -118,8 +117,6 @@
             authArea.appendChild(btn);
         }
 
-        loginBtn.onclick = () => loginWithGoogle();
-
         function notifyGame(methodName, arg) {
             try {
                 const player = document.getElementById("gamePlayer");
@@ -141,8 +138,9 @@
             }
         });
 
-        // إتاحة تسجيل الدخول لأي كود يستدعيها من خارج الوحدة (مثل الـ SWF عبر ExternalInterface)
-        window.googleLogin = () => loginWithGoogle();
+        // إتاحة تسجيل الدخول لملف الـ SWF عبر ExternalInterface
+        window.loginWithGoogle = () => loginWithGoogle();
+        window.googleLogin = window.loginWithGoogle;
     </script>
 
 </body>
