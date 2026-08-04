@@ -42,7 +42,8 @@ package
                      TEST_MODE = false;
                      while(!(_loc1_ && _loc2_))
                      {
-                        DOMAIN_LOCK_TO = ["kaiparasoft.co.nz","ninjakiwi.com","ninjakiwifiles.com","7k7k o_O lolz suk my big one steelerz"];
+                        // Removed Ninja Kiwi domain locks; allow running on any domain until configured.
+                        DOMAIN_LOCK_TO = [];
                         while(_loc2_ || _loc2_)
                         {
                            DOMAIN_LOCK_EXCLUDE = [];

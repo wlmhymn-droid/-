@@ -1,0 +1,6 @@
+{
+  "appId": "com.wlmhymn.mhymn",
+  "appName": "MHYMN",
+  "webDir": "web-build",
+  "bundledWebRuntime": false
+}
