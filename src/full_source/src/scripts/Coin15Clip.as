@@ -1,0 +1,20 @@
+package
+{
+   import flash.display.MovieClip;
+   
+   [Embed(source="/_assets/assets.swf", symbol="Coin15Clip")]
+   public dynamic class Coin15Clip extends MovieClip
+   {
+       
+      
+      public function Coin15Clip()
+      {
+         var _loc1_:Boolean = true;
+         var _loc2_:Boolean = false;
+         if(!(_loc2_ && Boolean(this)))
+         {
+            super();
+         }
+      }
+   }
+}

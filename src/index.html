@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle Panic</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: #111;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #topbar {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 8px 12px;
+            box-sizing: border-box;
+            color: #fff;
+        }
+        #authArea button {
+            background: #4285F4;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        #authArea button:hover { background: #3367D6; }
+        #authArea img {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            vertical-align: middle;
+            margin-inline-end: 8px;
+        }
+        #gameContainer {
+            width: 100%;
+            max-width: 1200px;
+            aspect-ratio: 4 / 3;
+        }
+        #gameContainer embed {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <!-- إعداد جودة Ruffle قبل تحميل السكربت: متوسطة لتناسب الأجهزة متوسطة الأداء -->
+    <script>
+        window.RufflePlayer = window.RufflePlayer || {};
+        window.RufflePlayer.config = {
+            quality: "medium",
+            letterbox: "on",
+            backgroundColor: "#000000",
+            autoplay: "on",
+            unmuteOverlay: "visible",
+            splashScreen: true,
+            maxExecutionDuration: 15
+        };
+    </script>
+    <script src="ruffle/ruffle.js"></script>
+
+    <script type="module" src="firebase/firebase.js"></script>
+    <script type="module" src="firebase/auth.js"></script>
+    <script type="module" src="firebase/save.js"></script>
+</head>
+
+<body>
+
+    <div id="topbar">
+        <div id="authArea">
+            <button id="loginBtn">تسجيل الدخول بحساب جوجل</button>
+        </div>
+    </div>
+
+    <div id="gameContainer">
+        <embed
+            id="gamePlayer"
+            src="battlepanic.swf"
+            width="1200"
+            height="900"
+            quality="medium"
+            allowscriptaccess="always">
+    </div>
+
+    <script type="module">
+        import { loginWithGoogle, logout, watchAuthState } from "./firebase/auth.js";
+
+        const authArea = document.getElementById("authArea");
+        const loginBtn = document.getElementById("loginBtn");
+
+        function renderLoggedIn(user) {
+            authArea.innerHTML = "";
+            const img = document.createElement("img");
+            img.src = user.photoURL || "";
+            const name = document.createElement("span");
+            name.textContent = user.displayName || user.email || "مستخدم";
+            const out = document.createElement("button");
+            out.textContent = "تسجيل الخروج";
+            out.style.marginInlineStart = "10px";
+            out.onclick = logout;
+            authArea.append(img, name, out);
+        }
+
+        function renderLoggedOut() {
+            authArea.innerHTML = "";
+            const btn = document.createElement("button");
+            btn.id = "loginBtn";
+            btn.textContent = "تسجيل الدخول بحساب جوجل";
+            btn.onclick = () => loginWithGoogle();
+            authArea.appendChild(btn);
+        }
+
+        loginBtn.onclick = () => loginWithGoogle();
+
+        function notifyGame(methodName, arg) {
+            try {
+                const player = document.getElementById("gamePlayer");
+                if (player && typeof player[methodName] === "function") {
+                    arg === undefined ? player[methodName]() : player[methodName](arg);
+                }
+            } catch (e) {
+                console.warn("Could not reach SWF method " + methodName, e);
+            }
+        }
+
+        watchAuthState((user) => {
+            if (user) {
+                renderLoggedIn(user);
+                notifyGame("onGoogleSignedIn", user.displayName || user.email || "Player");
+            } else {
+                renderLoggedOut();
+                notifyGame("onGoogleSignedOut");
+            }
+        });
+
+        // إتاحة تسجيل الدخول لأي كود يستدعيها من خارج الوحدة (مثل الـ SWF عبر ExternalInterface)
+        window.googleLogin = () => loginWithGoogle();
+    </script>
+
+</body>
+</html>

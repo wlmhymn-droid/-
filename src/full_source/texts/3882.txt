@@ -1,0 +1,9 @@
+Browsers recently made a change to the way flash cookie data could 
+--- RECORDSEPARATOR ---
+be stored.
+--- RECORDSEPARATOR ---
+This means that your local save data is not as reliable as it used to 
+--- RECORDSEPARATOR ---
+be and there is a good chance your progress might be lost.
+--- RECORDSEPARATOR ---
+We created the NK login as a way to protect your game progress.

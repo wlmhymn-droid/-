@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:ffdec="https://www.free-decompiler.com/flash" xmlns:xlink="http://www.w3.org/1999/xlink" ffdec:objectType="morphshape" height="45.2px" width="2.7px" xmlns="http://www.w3.org/2000/svg">
+  <g transform="matrix(1.0, 0.0, 0.0, 1.0, 1.05, 24.2)">
+    <path d="M0.05 -6.4 L-0.35 -6.35 -0.35 -6.85 Q-0.3 -11.45 -0.25 -16.05 -0.1 -20.15 0.05 -24.2 L0.25 -24.15 0.25 -23.65 0.2 -14.5 0.05 -6.4" fill="url(#gradient0)" fill-rule="evenodd" stroke="none">
+      <animate attributeName="d" dur="2s" repeatCount="indefinite" values="M0.05 -6.4 L-0.35 -6.35 -0.35 -6.85 Q-0.3 -11.45 -0.25 -16.05 -0.1 -20.15 0.05 -24.2 L0.25 -24.15 0.25 -23.65 0.2 -14.5 0.05 -6.4;M1.65 20.9 L0.85 21.0 0.5 21.0 Q-0.2 13.05 -0.7 0.6 -1.3 -13.8 -0.8 -17.3 L-0.3 -17.2 -0.1 -17.2 0.9 2.8 1.65 20.9"/>
+    </path>
+    <path d="M0.05 -6.4 L0.2 -14.5 0.25 -23.65 0.25 -24.15 0.05 -24.2 Q-0.1 -20.15 -0.25 -16.05 -0.3 -11.45 -0.35 -6.85 L-0.35 -6.35 0.05 -6.4 Z" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.0" stroke-width="0.0">
+      <animate attributeName="stroke" dur="2s" repeatCount="indefinite" values="#000000;#000001"/>
+      <animate attributeName="stroke-width" dur="2s" repeatCount="indefinite" values="0.0;0.0"/>
+      <animate attributeName="fill-opacity" dur="2s" repeatCount="indefinite" values="0.0;0.0"/>
+      <animate attributeName="d" dur="2s" repeatCount="indefinite" values="M0.05 -6.4 L0.2 -14.5 0.25 -23.65 0.25 -24.15 0.05 -24.2 Q-0.1 -20.15 -0.25 -16.05 -0.3 -11.45 -0.35 -6.85 L-0.35 -6.35 0.05 -6.4 Z;M1.65 20.9 L0.9 2.8 -0.1 -17.2 -0.3 -17.2 -0.8 -17.3 Q-1.3 -13.8 -0.7 0.6 -0.2 13.05 0.5 21.0 L0.85 21.0 1.65 20.9 Z"/>
+    </path>
+  </g>
+  <defs>
+    <linearGradient gradientTransform="matrix(-0.0023, -0.0109, 0.0026, 0.0, -0.1, -15.25)" gradientUnits="userSpaceOnUse" id="gradient0" spreadMethod="pad" x1="-819.2" x2="819.2">
+      <animateTransform additive="replace" attributeName="gradientTransform" dur="2s" from="1" repeatCount="indefinite" to="1" type="scale"/>
+      <animateTransform additive="sum" attributeName="gradientTransform" dur="2s" from="-0.1 -15.25" repeatCount="indefinite" to="0.95 -0.05" type="translate"/>
+      <animateTransform additive="sum" attributeName="gradientTransform" dur="2s" from="-101.6788" repeatCount="indefinite" to="-109.2479" type="rotate"/>
+      <animateTransform additive="sum" attributeName="gradientTransform" dur="2s" from="0.0112 0.0026" repeatCount="indefinite" to="0.0245 0.0073" type="scale"/>
+      <animateTransform additive="sum" attributeName="gradientTransform" dur="2s" from="-2.634" repeatCount="indefinite" to="-5.1617" type="skewX"/>
+      <stop offset="0.0" stop-color="#ffffff" stop-opacity="0.0">
+        <animate attributeName="offset" dur="2s" repeatCount="indefinite" values="0.0;0.0"/>
+        <animate attributeName="stop-color" dur="2s" repeatCount="indefinite" values="#ffffff;#ffffff"/>
+        <animate attributeName="stop-opacity" dur="2s" repeatCount="indefinite" values="0.0;0.0"/>
+      </stop>
+      <stop offset="0.6078431372549019" stop-color="#ffffff" stop-opacity="0.34117648">
+        <animate attributeName="offset" dur="2s" repeatCount="indefinite" values="0.6078431372549019;0.6078431372549019"/>
+        <animate attributeName="stop-color" dur="2s" repeatCount="indefinite" values="#ffffff;#ffffff"/>
+        <animate attributeName="stop-opacity" dur="2s" repeatCount="indefinite" values="0.34117648;0.34117648"/>
+      </stop>
+      <stop offset="0.9607843137254902" stop-color="#ffffff" stop-opacity="0.0">
+        <animate attributeName="offset" dur="2s" repeatCount="indefinite" values="0.9607843137254902;0.9607843137254902"/>
+        <animate attributeName="stop-color" dur="2s" repeatCount="indefinite" values="#ffffff;#ffffff"/>
+        <animate attributeName="stop-opacity" dur="2s" repeatCount="indefinite" values="0.0;0.0"/>
+      </stop>
+    </linearGradient>
+  </defs>
+</svg>
