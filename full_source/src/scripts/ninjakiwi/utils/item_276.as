@@ -1,13 +1,10 @@
 package ninjakiwi.utils
 {
-   public interface §[8§
+   // Sanitized interface: removed external NK-specific behavior.
+   public interface INKInterface
    {
-       
-      
-      function §,'§() : void;
-      
-      function §<9§() : §[8§;
-      
-      function §7Z§(param1:§[8§) : void;
+      function init():void;
+      function getInstance():INKInterface;
+      function setInstance(param:INKInterface):void;
    }
 }
