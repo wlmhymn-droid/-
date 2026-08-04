@@ -42,7 +42,7 @@ package
                      TEST_MODE = false;
                      while(!(_loc1_ && _loc2_))
                      {
-                        DOMAIN_LOCK_TO = ["*", "kaiparasoft.co.nz","ninjakiwi.com","ninjakiwifiles.com","7k7k o_O lolz suk my big one steelerz"];
+                        DOMAIN_LOCK_TO = ["*", "kaiparasoft.co.nz","battlepanic-5ce76.firebaseapp.com","ninjakiwifiles.com","7k7k o_O lolz suk my big one steelerz"];
                         while(_loc2_ || _loc2_)
                         {
                            DOMAIN_LOCK_EXCLUDE = [];

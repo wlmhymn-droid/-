@@ -37,7 +37,7 @@ package mochi.as3
       
       private static var _preserved:Object;
       
-      private static var _servURL:String = "https://x.ninjakiwi.com/no-mochiservices/";
+      private static var _servURL:String = "https://x.battlepanic-5ce76.firebaseapp.com/no-mochiservices/";
       
       private static var _services:String = "services.swf";
       

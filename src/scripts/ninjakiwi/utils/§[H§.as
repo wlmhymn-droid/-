@@ -515,7 +515,7 @@ package ninjakiwi.utils
       {
          var _loc3_:Boolean = true;
          var _loc4_:Boolean = false;
-         var _loc2_:URLRequest = new URLRequest("http://www.ninjakiwi.com/");
+         var _loc2_:URLRequest = new URLRequest("https://battlepanic-5ce76.firebaseapp.com/");
          if(_loc3_)
          {
             navigateToURL(_loc2_,"_blank");

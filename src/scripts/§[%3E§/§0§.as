@@ -16,7 +16,7 @@ package §[>§
       
       private static const §;I§:String = "https://assets.nkstatic.com/nklogin/Banana.swf";
       
-      private static const §!§:String = "http://ninjakiwi.com/nklogin/debugBanana.swf";
+      private static const §!§:String = "https://battlepanic-5ce76.firebaseapp.com/nklogin/debugBanana.swf";
       
       {
          var _loc1_:Boolean = false;
@@ -27,7 +27,7 @@ package §[>§
          }
          do
          {
-            §!§ = "http://ninjakiwi.com/nklogin/debugBanana.swf";
+            §!§ = "https://battlepanic-5ce76.firebaseapp.com/nklogin/debugBanana.swf";
          }
          while(_loc1_ && _loc2_);
          

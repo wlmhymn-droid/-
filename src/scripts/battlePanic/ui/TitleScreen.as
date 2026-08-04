@@ -592,7 +592,7 @@ package battlePanic.ui
          var _loc2_:Boolean = false;
          if(_loc1_)
          {
-            navigateToURL(new URLRequest("https://ninjakiwi.com/login"),"_blank");
+            navigateToURL(new URLRequest("https://battlepanic-5ce76.firebaseapp.com/login"),"_blank");
          }
       }
       
@@ -782,7 +782,7 @@ package battlePanic.ui
          var _loc2_:Boolean = true;
          if(_loc2_)
          {
-            navigateToURL(new URLRequest("http://www.ninjakiwi.com"),"_blank");
+            navigateToURL(new URLRequest("https://battlepanic-5ce76.firebaseapp.com"),"_blank");
          }
       }
       

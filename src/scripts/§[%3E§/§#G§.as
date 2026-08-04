@@ -83,7 +83,7 @@ package §[>§
          var _loc3_:Boolean = false;
          if(!(_loc3_ && Boolean(param1)))
          {
-            navigateToURL(new URLRequest("https://ninjakiwi.com/login"),"_blank");
+            navigateToURL(new URLRequest("https://battlepanic-5ce76.firebaseapp.com/login"),"_blank");
          }
       }
       
