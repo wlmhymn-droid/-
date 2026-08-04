@@ -2,6 +2,10 @@ package {
   import flash.external.ExternalInterface;
   import flash.display.MovieClip;
   import flash.display.Stage;
+  import flash.utils.describeType;
+  
+  // الاستيراد الجديد لإدارة حفظ البيانات في اللعبة
+  import battlePanic.persistence.Persistence;
 
   public class CloudService {
     public function CloudService() {
@@ -57,14 +61,29 @@ package {
     }
 
     private static function onAuthChangedFromJS(payload:Object):void {
-      // payload is JSON string or null
-      trace("CloudService.onAuthChangedFromJS: " + payload);
-      // Game code should register its own handlers or check CloudService state
+      try {
+        trace("CloudService.onAuthChangedFromJS: " + payload);
+
+        if (payload != null) {
+          load("autosave");
+        }
+
+      } catch (e:Error) {
+        trace(e);
+      }
     }
 
     private static function onSaveLoadedFromJS(payload:Object):void {
-      trace("CloudService.onSaveLoadedFromJS: " + payload);
-      // payload is JSON string of the save data, game must parse and load
+      try {
+        trace("CloudService.onSaveLoadedFromJS: " + payload);
+
+        Persistence.getInstance().applyCloudData(
+          payload == null ? null : String(payload)
+        );
+
+      } catch (e:Error) {
+        trace("CloudService.onSaveLoadedFromJS failed: " + e.message);
+      }
     }
 
     private static function onSaveSavedFromJS(payload:Object):void {
